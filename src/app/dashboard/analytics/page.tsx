@@ -253,7 +253,7 @@ export default function AnalyticsPage() {
             <CardDescription>Routes with highest average delays</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig} className="h-[300px] w-full">
+            <ChartContainer config={chartConfig} className="h-[300px] w-full aspect-auto">
               <BarChart data={worstRoutes} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
                 <XAxis type="number" tickLine={false} axisLine={false} unit=" min" />

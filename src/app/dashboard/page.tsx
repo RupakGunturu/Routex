@@ -199,7 +199,7 @@ export default function DashboardPage() {
             <CardDescription>Average delay by route (minutes)</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfigBar} className="h-[250px] w-full">
+            <ChartContainer config={chartConfigBar} className="h-[250px] w-full aspect-auto">
               <BarChart data={routeDelayData} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
                 <XAxis type="number" tickLine={false} axisLine={false} />
@@ -218,7 +218,7 @@ export default function DashboardPage() {
             <CardDescription>Average delay throughout the day</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfigLine} className="h-[250px] w-full">
+            <ChartContainer config={chartConfigLine} className="h-[250px] w-full aspect-auto">
               <LineChart data={hourlyDelayData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="hour" tickLine={false} axisLine={false} tick={{ fontSize: 11 }} />
@@ -244,7 +244,7 @@ export default function DashboardPage() {
             <CardDescription>Delay and trip volume by day</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfigArea} className="h-[250px] w-full">
+            <ChartContainer config={chartConfigArea} className="h-[250px] w-full aspect-auto">
               <AreaChart data={dailyTrendData}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 11 }} />

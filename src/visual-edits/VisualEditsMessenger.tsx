@@ -3,6 +3,18 @@
 
 import { useEffect, useState, useRef } from "react";
 
+// Throttle helper
+function throttle<T extends (...args: any[]) => any>(func: T, limit: number): T {
+  let inThrottle: boolean;
+  return function (this: any, ...args: any[]) {
+    if (!inThrottle) {
+      func.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  } as T;
+}
+
 export const CHANNEL = "ORCHIDS_HOVER_v1" as const;
 const VISUAL_EDIT_MODE_KEY = "orchids_visual_edit_mode" as const;
 const FOCUSED_ELEMENT_KEY = "orchids_focused_element" as const;
@@ -27,118 +39,118 @@ export type ParentToChild =
   | { type: typeof CHANNEL; msg: "SCROLL"; dx: number; dy: number }
   | { type: typeof CHANNEL; msg: "CLEAR_INLINE_STYLES"; elementId: string }
   | {
-      type: typeof CHANNEL;
-      msg: "PREVIEW_FONT";
-      elementId: string;
-      fontFamily: string;
-    }
+    type: typeof CHANNEL;
+    msg: "PREVIEW_FONT";
+    elementId: string;
+    fontFamily: string;
+  }
   | {
-      type: typeof CHANNEL;
-      msg: "RESIZE_ELEMENT";
-      elementId: string;
-      width: number;
-      height: number;
-    }
+    type: typeof CHANNEL;
+    msg: "RESIZE_ELEMENT";
+    elementId: string;
+    width: number;
+    height: number;
+  }
   | {
-      type: typeof CHANNEL;
-      msg: "SHOW_ELEMENT_HOVER";
-      elementId: string | null;
-    };
+    type: typeof CHANNEL;
+    msg: "SHOW_ELEMENT_HOVER";
+    elementId: string | null;
+  };
 
 export type ChildToParent =
   | {
-      type: typeof CHANNEL;
-      msg: "HIT";
-      id: string | null;
-      tag: string | null;
-      rect: { top: number; left: number; width: number; height: number } | null;
-    }
+    type: typeof CHANNEL;
+    msg: "HIT";
+    id: string | null;
+    tag: string | null;
+    rect: { top: number; left: number; width: number; height: number } | null;
+  }
   | {
-      type: typeof CHANNEL;
-      msg: "ELEMENT_CLICKED";
-      id: string | null;
-      tag: string | null;
-      rect: { top: number; left: number; width: number; height: number };
-      clickPosition: { x: number; y: number };
-      isEditable?: boolean;
-      currentStyles?: {
-        fontSize?: string;
-        color?: string;
-        fontWeight?: string;
-        fontStyle?: string;
-        textDecoration?: string;
-        textAlign?: string;
-        lineHeight?: string;
-        letterSpacing?: string;
-        paddingLeft?: string;
-        paddingRight?: string;
-        paddingTop?: string;
-        paddingBottom?: string;
-        marginLeft?: string;
-        marginRight?: string;
-        marginTop?: string;
-        marginBottom?: string;
-        backgroundColor?: string;
-        backgroundImage?: string;
-        borderRadius?: string;
-        fontFamily?: string;
-        opacity?: string;
-        display?: string;
-        flexDirection?: string;
-        alignItems?: string;
-        justifyContent?: string;
-        gap?: string;
-      };
-      className?: string;
-      src?: string;
-    }
+    type: typeof CHANNEL;
+    msg: "ELEMENT_CLICKED";
+    id: string | null;
+    tag: string | null;
+    rect: { top: number; left: number; width: number; height: number };
+    clickPosition: { x: number; y: number };
+    isEditable?: boolean;
+    currentStyles?: {
+      fontSize?: string;
+      color?: string;
+      fontWeight?: string;
+      fontStyle?: string;
+      textDecoration?: string;
+      textAlign?: string;
+      lineHeight?: string;
+      letterSpacing?: string;
+      paddingLeft?: string;
+      paddingRight?: string;
+      paddingTop?: string;
+      paddingBottom?: string;
+      marginLeft?: string;
+      marginRight?: string;
+      marginTop?: string;
+      marginBottom?: string;
+      backgroundColor?: string;
+      backgroundImage?: string;
+      borderRadius?: string;
+      fontFamily?: string;
+      opacity?: string;
+      display?: string;
+      flexDirection?: string;
+      alignItems?: string;
+      justifyContent?: string;
+      gap?: string;
+    };
+    className?: string;
+    src?: string;
+  }
   | { type: typeof CHANNEL; msg: "SCROLL_STARTED" }
   | { type: typeof CHANNEL; msg: "SCROLL_STOPPED" }
   | {
-      type: typeof CHANNEL;
-      msg: "TEXT_CHANGED";
-      id: string;
-      oldText: string;
-      newText: string;
-      filePath: string;
-      line: number;
-      column: number;
-    }
+    type: typeof CHANNEL;
+    msg: "TEXT_CHANGED";
+    id: string;
+    oldText: string;
+    newText: string;
+    filePath: string;
+    line: number;
+    column: number;
+  }
   | {
-      type: typeof CHANNEL;
-      msg: "STYLE_CHANGED";
-      id: string;
-      styles: Record<string, string>;
-      filePath: string;
-      line: number;
-      column: number;
-    }
+    type: typeof CHANNEL;
+    msg: "STYLE_CHANGED";
+    id: string;
+    styles: Record<string, string>;
+    filePath: string;
+    line: number;
+    column: number;
+  }
   | {
-      type: typeof CHANNEL;
-      msg: "STYLE_BLUR";
-      id: string;
-      styles: Record<string, string>;
-      filePath: string;
-      line: number;
-      column: number;
-      className: string;
-    }
+    type: typeof CHANNEL;
+    msg: "STYLE_BLUR";
+    id: string;
+    styles: Record<string, string>;
+    filePath: string;
+    line: number;
+    column: number;
+    className: string;
+  }
   | {
-      type: typeof CHANNEL;
-      msg: "IMAGE_BLUR";
-      id: string;
-      oldSrc: string;
-      newSrc: string;
-      filePath: string;
-      line: number;
-      column: number;
-    }
+    type: typeof CHANNEL;
+    msg: "IMAGE_BLUR";
+    id: string;
+    oldSrc: string;
+    newSrc: string;
+    filePath: string;
+    line: number;
+    column: number;
+  }
   | {
-      type: typeof CHANNEL;
-      msg: "FOCUS_MOVED";
-      id: string;
-      rect: { top: number; left: number; width: number; height: number };
-    }
+    type: typeof CHANNEL;
+    msg: "FOCUS_MOVED";
+    id: string;
+    rect: { top: number; left: number; width: number; height: number };
+  }
   | { type: typeof CHANNEL; msg: "VISUAL_EDIT_MODE_ACK"; active: boolean }
   | { type: typeof CHANNEL; msg: "VISUAL_EDIT_MODE_RESTORED"; active: boolean };
 
@@ -1333,7 +1345,7 @@ export default function HoverReceiver() {
 
   useEffect(() => {
     // Handle pointer movement directly in the iframe
-    function onPointerMove(e: PointerEvent) {
+    const onPointerMove = throttle((e: PointerEvent) => {
       if (isResizingRef.current) {
         return;
       }
@@ -1430,10 +1442,10 @@ export default function HoverReceiver() {
         };
         postMessageDedup(msg);
       }
-    }
+    }, 50); // Throttle to 50ms (20fps)
 
     // Handle pointer leaving the document
-    function onPointerLeave() {
+    const onPointerLeave = () => {
       if (!isVisualEditModeRef.current) return;
 
       if (isResizingRef.current) return;
@@ -1458,7 +1470,7 @@ export default function HoverReceiver() {
     }
 
     // Handle mousedown to prepare element for editing
-    function onMouseDownCapture(e: MouseEvent) {
+    const onMouseDownCapture = (e: MouseEvent) => {
       if (isResizingRef.current) return;
       // Only handle if visual edit mode is active
       if (!isVisualEditModeRef.current) return;
@@ -1491,7 +1503,7 @@ export default function HoverReceiver() {
     }
 
     // Handle clicks to focus elements
-    function onClickCapture(e: MouseEvent) {
+    const onClickCapture = (e: MouseEvent) => {
       if (isResizingRef.current) return;
       // Only handle if visual edit mode is active
       if (!isVisualEditModeRef.current) return;
@@ -1697,17 +1709,17 @@ export default function HoverReceiver() {
           tag: tagName,
           rect: expandedBox
             ? {
-                top: expandedBox.top,
-                left: expandedBox.left,
-                width: expandedBox.width,
-                height: expandedBox.height,
-              }
+              top: expandedBox.top,
+              left: expandedBox.left,
+              width: expandedBox.width,
+              height: expandedBox.height,
+            }
             : {
-                top: 0,
-                left: 0,
-                width: 0,
-                height: 0,
-              },
+              top: 0,
+              left: 0,
+              width: 0,
+              height: 0,
+            },
           clickPosition: {
             x: e.clientX,
             y: e.clientY,
@@ -1955,7 +1967,7 @@ export default function HoverReceiver() {
     }
 
     // Handle scroll events to update hover box position
-    function onScroll() {
+    const onScroll = throttle(() => {
       if (isResizingRef.current) return;
       // Only update hover box if visual edit mode is active
       if (!isVisualEditModeRef.current) return;
@@ -1984,7 +1996,7 @@ export default function HoverReceiver() {
         };
         postMessageDedup(scrollStopMsg);
       }, 16); // One frame (16ms) for instant restoration
-    }
+    }, 50); // Throttle scroll handling to 50ms
 
     // Add event listeners
     document.addEventListener("pointermove", onPointerMove, { passive: true });
