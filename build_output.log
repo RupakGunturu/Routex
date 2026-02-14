@@ -1,0 +1,15 @@
+
+> routex-angular@0.0.0 build
+> ng build
+
+[33mΓ¥»[39m Building...
+[32mΓ£ö[39m Building...
+Application bundle generation failed. [9.362 seconds]
+
+X [ERROR] No matching export in "node_modules/@angular/core/fesm2022/core.mjs" for import "afterEveryRender"
+
+    node_modules/ng-apexcharts/fesm2022/ng-apexcharts.mjs:2:99:
+      2 Γöé ...ector, afterNextRender, afterEveryRender, ChangeDetectionStrateg...
+        Γò╡                            ~~~~~~~~~~~~~~~~
+
+
