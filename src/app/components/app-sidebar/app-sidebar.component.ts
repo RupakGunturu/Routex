@@ -109,22 +109,7 @@ import { SidebarService } from '../../services/sidebar.service';
           </app-sidebar-menu>
         </app-sidebar-footer>
       </app-sidebar>
-
-      <!-- Sidebar Inset equivalent -->
-      <main class="bg-background relative flex w-full flex-1 flex-col">
-        <header class="flex h-14 items-center gap-4 border-b bg-background px-6">
-          <button (click)="sidebarService.toggleSidebar()" class="p-2 hover:bg-muted rounded-md md:hidden">
-            <lucide-icon [name]="PanelLeft" class="h-5 w-5"></lucide-icon>
-          </button>
-          <div class="h-6 w-px bg-border hidden md:block"></div>
-          <div class="flex-1">
-            <h1 class="text-lg font-semibold">Public Transport Delay Analytics</h1>
-          </div>
-        </header>
-        <div class="flex-1 overflow-auto bg-muted/30 p-6">
-          <ng-content></ng-content>
-        </div>
-      </main>
+      <ng-content></ng-content>
     </app-sidebar-provider>
   `,
 })

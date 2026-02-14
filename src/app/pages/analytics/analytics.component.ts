@@ -36,7 +36,6 @@ import { SelectComponent, SelectItemComponent, SliderComponent } from '../../com
     FormsModule,
     LucideAngularModule,
     NgApexchartsModule,
-    AppSidebarComponent,
     CardComponent,
     CardHeaderComponent,
     CardTitleComponent,
@@ -48,162 +47,160 @@ import { SelectComponent, SelectItemComponent, SliderComponent } from '../../com
     SliderComponent
   ],
   template: `
-    <app-sidebar-root>
-      <div class="space-y-8">
-        <div class="flex flex-col gap-1">
-          <h2 class="font-heading text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Analytics & Insights</h2>
-          <p class="text-slate-500 dark:text-slate-400">Deep dive into delay patterns and performance metrics</p>
-        </div>
+    <div class="space-y-8">
+      <div class="flex flex-col gap-1">
+        <h2 class="font-heading text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Analytics & Insights</h2>
+        <p class="text-slate-500 dark:text-slate-400">Deep dive into delay patterns and performance metrics</p>
+      </div>
 
-        <!-- Filter Panel -->
-        <app-card class="bg-slate-50/50 dark:bg-slate-900/50 border-dashed">
-          <app-card-header>
-            <app-card-title class="flex items-center gap-2 text-base">
-              <lucide-icon [name]="Filter" class="h-4 w-4 text-blue-600"></lucide-icon>
-              Filters
-            </app-card-title>
-          </app-card-header>
-          <app-card-content>
-            <div class="grid gap-8 md:grid-cols-3">
-              <div class="space-y-2.5">
-                <app-label class="text-xs font-bold uppercase tracking-wider text-slate-500">Route Selection</app-label>
-                <app-select [(ngModel)]="selectedRoute">
-                  <app-select-item *ngFor="let route of routes" [value]="route">{{route}}</app-select-item>
-                </app-select>
-              </div>
-              <div class="space-y-2.5">
-                <app-label class="text-xs font-bold uppercase tracking-wider text-slate-500">Timeframe</app-label>
-                <app-select [(ngModel)]="selectedDateRange">
-                  <app-select-item value="today">Today</app-select-item>
-                  <app-select-item value="last7">Last 7 Days</app-select-item>
-                  <app-select-item value="last30">Last 30 Days</app-select-item>
-                  <app-select-item value="last90">Last 90 Days</app-select-item>
-                </app-select>
-              </div>
-              <div class="space-y-4">
-                <app-label class="text-xs font-bold uppercase tracking-wider text-slate-500">Time Window: {{timeRange[0]}}:00 - {{timeRange[1] || 24}}:00</app-label>
-                <div class="pt-2">
-                  <app-slider [(ngModel)]="timeRange" [min]="0" [max]="24" [step]="1"></app-slider>
-                </div>
+      <!-- Filter Panel -->
+      <app-card class="bg-slate-50/50 dark:bg-slate-900/50 border-dashed">
+        <app-card-header>
+          <app-card-title class="flex items-center gap-2 text-base">
+            <lucide-icon [name]="Filter" class="h-4 w-4 text-blue-600"></lucide-icon>
+            Filters
+          </app-card-title>
+        </app-card-header>
+        <app-card-content>
+          <div class="grid gap-8 md:grid-cols-3">
+            <div class="space-y-2.5">
+              <app-label class="text-xs font-bold uppercase tracking-wider text-slate-500">Route Selection</app-label>
+              <app-select [(ngModel)]="selectedRoute">
+                <app-select-item *ngFor="let route of routes" [value]="route">{{route}}</app-select-item>
+              </app-select>
+            </div>
+            <div class="space-y-2.5">
+              <app-label class="text-xs font-bold uppercase tracking-wider text-slate-500">Timeframe</app-label>
+              <app-select [(ngModel)]="selectedDateRange">
+                <app-select-item value="today">Today</app-select-item>
+                <app-select-item value="last7">Last 7 Days</app-select-item>
+                <app-select-item value="last30">Last 30 Days</app-select-item>
+                <app-select-item value="last90">Last 90 Days</app-select-item>
+              </app-select>
+            </div>
+            <div class="space-y-4">
+              <app-label class="text-xs font-bold uppercase tracking-wider text-slate-500">Time Window: {{timeRange[0]}}:00 - {{timeRange[1] || 24}}:00</app-label>
+              <div class="pt-2">
+                <app-slider [(ngModel)]="timeRange" [min]="0" [max]="24" [step]="1"></app-slider>
               </div>
             </div>
-          </app-card-content>
-        </app-card>
+          </div>
+        </app-card-content>
+      </app-card>
 
-        <!-- Peak Delay Heatmap -->
+      <!-- Peak Delay Heatmap -->
+      <app-card>
+        <app-card-header>
+          <app-card-title class="flex items-center gap-2">
+            <lucide-icon [name]="TrendingUp" class="h-5 w-5 text-indigo-500"></lucide-icon>
+            Peak Delay Heatmap
+          </app-card-title>
+          <app-card-description>Average delays by hour and day of week (minutes)</app-card-description>
+        </app-card-header>
+        <app-card-content>
+          <div class="overflow-x-auto -mx-6 px-6">
+            <table class="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th class="p-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Hour</th>
+                  <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Mon</th>
+                  <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Tue</th>
+                  <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Wed</th>
+                  <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Thu</th>
+                  <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Fri</th>
+                  <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Sat</th>
+                  <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Sun</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of heatmapData" class="border-t border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 dark:hover:bg-slate-900/10 transition-colors">
+                  <td class="p-3 font-semibold text-xs text-slate-700 dark:text-slate-300">{{row.hour}}</td>
+                  <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.mon)">{{row.mon}}</div></td>
+                  <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.tue)">{{row.tue}}</div></td>
+                  <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.wed)">{{row.wed}}</div></td>
+                  <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.thu)">{{row.thu}}</div></td>
+                  <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.fri)">{{row.fri}}</div></td>
+                  <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.sat)">{{row.sat}}</div></td>
+                  <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.sun)">{{row.sun}}</div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="flex flex-wrap items-center gap-6 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800/50 text-xs font-medium text-slate-500">
+            <span class="font-bold uppercase tracking-tighter">Delay Intensity:</span>
+            <div class="flex items-center gap-2"><div class="w-4 h-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-sm"></div><span>0-2 min</span></div>
+            <div class="flex items-center gap-2"><div class="w-4 h-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-sm"></div><span>4-6 min</span></div>
+            <div class="flex items-center gap-2"><div class="w-4 h-4 bg-orange-200 dark:bg-orange-900/40 rounded-sm"></div><span>8-10 min</span></div>
+            <div class="flex items-center gap-2"><div class="w-4 h-4 bg-rose-500 rounded-sm"></div><span>10+ min</span></div>
+          </div>
+        </app-card-content>
+      </app-card>
+
+      <div class="grid gap-6 lg:grid-cols-2">
+        <!-- Worst Performing Routes -->
         <app-card>
           <app-card-header>
-            <app-card-title class="flex items-center gap-2">
-              <lucide-icon [name]="TrendingUp" class="h-5 w-5 text-indigo-500"></lucide-icon>
-              Peak Delay Heatmap
+            <app-card-title class="flex items-center gap-2 text-base">
+              <lucide-icon [name]="AlertTriangle" class="h-5 w-5 text-rose-500"></lucide-icon>
+              Critical Route Delays
             </app-card-title>
-            <app-card-description>Average delays by hour and day of week (minutes)</app-card-description>
+            <app-card-description>Routes requiring immediate attention</app-card-description>
           </app-card-header>
           <app-card-content>
-            <div class="overflow-x-auto -mx-6 px-6">
-              <table class="w-full border-collapse">
-                <thead>
-                  <tr>
-                    <th class="p-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500">Hour</th>
-                    <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Mon</th>
-                    <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Tue</th>
-                    <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Wed</th>
-                    <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Thu</th>
-                    <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Fri</th>
-                    <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Sat</th>
-                    <th class="p-3 text-center text-xs font-bold uppercase tracking-wider text-slate-500">Sun</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let row of heatmapData" class="border-t border-slate-100 dark:border-slate-800/50 hover:bg-slate-50/50 dark:hover:bg-slate-900/10 transition-colors">
-                    <td class="p-3 font-semibold text-xs text-slate-700 dark:text-slate-300">{{row.hour}}</td>
-                    <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.mon)">{{row.mon}}</div></td>
-                    <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.tue)">{{row.tue}}</div></td>
-                    <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.wed)">{{row.wed}}</div></td>
-                    <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.thu)">{{row.thu}}</div></td>
-                    <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.fri)">{{row.fri}}</div></td>
-                    <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.sat)">{{row.sat}}</div></td>
-                    <td class="p-1.5"><div [class]="'heat-cell ' + getHeatLevel(row.sun)">{{row.sun}}</div></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="flex flex-wrap items-center gap-6 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800/50 text-xs font-medium text-slate-500">
-              <span class="font-bold uppercase tracking-tighter">Delay Intensity:</span>
-              <div class="flex items-center gap-2"><div class="w-4 h-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-sm"></div><span>0-2 min</span></div>
-              <div class="flex items-center gap-2"><div class="w-4 h-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-sm"></div><span>4-6 min</span></div>
-              <div class="flex items-center gap-2"><div class="w-4 h-4 bg-orange-200 dark:bg-orange-900/40 rounded-sm"></div><span>8-10 min</span></div>
-              <div class="flex items-center gap-2"><div class="w-4 h-4 bg-rose-500 rounded-sm"></div><span>10+ min</span></div>
+            <div class="h-[300px] w-full">
+              <apx-chart
+                [series]="worstRoutesOptions.series!"
+                [chart]="worstRoutesOptions.chart!"
+                [xaxis]="worstRoutesOptions.xaxis!"
+                [plotOptions]="worstRoutesOptions.plotOptions!"
+                [colors]="worstRoutesOptions.colors!"
+                [dataLabels]="worstRoutesOptions.dataLabels!"
+                [grid]="worstRoutesOptions.grid!"
+              ></apx-chart>
             </div>
           </app-card-content>
         </app-card>
 
-        <div class="grid gap-6 lg:grid-cols-2">
-          <!-- Worst Performing Routes -->
-          <app-card>
-            <app-card-header>
-              <app-card-title class="flex items-center gap-2 text-base">
-                <lucide-icon [name]="AlertTriangle" class="h-5 w-5 text-rose-500"></lucide-icon>
-                Critical Route Delays
-              </app-card-title>
-              <app-card-description>Routes requiring immediate attention</app-card-description>
-            </app-card-header>
-            <app-card-content>
-              <div class="h-[300px] w-full">
-                <apx-chart
-                  [series]="worstRoutesOptions.series!"
-                  [chart]="worstRoutesOptions.chart!"
-                  [xaxis]="worstRoutesOptions.xaxis!"
-                  [plotOptions]="worstRoutesOptions.plotOptions!"
-                  [colors]="worstRoutesOptions.colors!"
-                  [dataLabels]="worstRoutesOptions.dataLabels!"
-                  [grid]="worstRoutesOptions.grid!"
-                ></apx-chart>
-              </div>
-            </app-card-content>
-          </app-card>
-
-          <!-- Vehicle Reliability Ranking -->
-          <app-card>
-            <app-card-header>
-              <app-card-title class="flex items-center gap-2 text-base">
-                <lucide-icon [name]="Trophy" class="h-5 w-5 text-amber-500"></lucide-icon>
-                Fleet Performance Leaderboard
-              </app-card-title>
-              <app-card-description>Ranking vehicles by reliability and on-time performance</app-card-description>
-            </app-card-header>
-            <app-card-content>
-              <div class="space-y-6">
-                <div *ngFor="let vehicle of vehicleRanking; let i = index" class="group flex items-center gap-4 p-2 rounded-lg transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/50">
-                  <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-400">
-                    {{i + 1}}
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="font-bold text-slate-700 dark:text-slate-200">{{vehicle.vehicle}}</span>
-                      <span class="text-xs font-medium text-slate-500">
-                        {{vehicle.onTime}} / {{vehicle.totalTrips}} trips
-                      </span>
-                    </div>
-                    <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div
-                        class="h-full bg-blue-500 rounded-full transition-all duration-500"
-                        [style.width.%]="vehicle.reliability"
-                      ></div>
-                    </div>
-                  </div>
-                  <div class="w-16 text-right shrink-0">
-                    <span [class]="getReliabilityTextClass(vehicle.reliability)" class="text-sm">
-                      {{vehicle.reliability}}%
+        <!-- Vehicle Reliability Ranking -->
+        <app-card>
+          <app-card-header>
+            <app-card-title class="flex items-center gap-2 text-base">
+              <lucide-icon [name]="Trophy" class="h-5 w-5 text-amber-500"></lucide-icon>
+              Fleet Performance Leaderboard
+            </app-card-title>
+            <app-card-description>Ranking vehicles by reliability and on-time performance</app-card-description>
+          </app-card-header>
+          <app-card-content>
+            <div class="space-y-6">
+              <div *ngFor="let vehicle of vehicleRanking; let i = index" class="group flex items-center gap-4 p-2 rounded-lg transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/50">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-600 dark:text-slate-400">
+                  {{i + 1}}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between mb-1.5">
+                    <span class="font-bold text-slate-700 dark:text-slate-200">{{vehicle.vehicle}}</span>
+                    <span class="text-xs font-medium text-slate-500">
+                      {{vehicle.onTime}} / {{vehicle.totalTrips}} trips
                     </span>
                   </div>
+                  <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      class="h-full bg-blue-500 rounded-full transition-all duration-500"
+                      [style.width.%]="vehicle.reliability"
+                    ></div>
+                  </div>
+                </div>
+                <div class="w-16 text-right shrink-0">
+                  <span [class]="getReliabilityTextClass(vehicle.reliability)" class="text-sm">
+                    {{vehicle.reliability}}%
+                  </span>
                 </div>
               </div>
-            </app-card-content>
-          </app-card>
-        </div>
+            </div>
+          </app-card-content>
+        </app-card>
       </div>
-    </app-sidebar-root>
+    </div>
   `,
 })
 export class AnalyticsComponent {
